@@ -52,7 +52,7 @@ basic.forever(function () {
     strip.rotate(LEDdirection)
     strip.show()
     basic.pause(200)
-    if (input.runningTime() > 600000) {
+    if (input.runningTime() > runningTimeCeiling) {
         strip.clear()
     }
 })
