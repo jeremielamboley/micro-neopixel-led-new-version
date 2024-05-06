@@ -1,58 +1,103 @@
-input.onButtonPressed(Button.A, function () {
-    LEDdirection = still
-    strip.showColor(LedColors[LedColorIndex])
-    if (LedColorIndex == 8) {
-        LedColorIndex = 0
-    } else {
-        LedColorIndex = LedColorIndex + 1
+function oneColorWipe (colorNumber: number) {
+    for (let index = 0; index < numberOfLEDs; index++) {
+        strip.setPixelColor(0, LedColors[colorNumber])
+        strip.show()
+        strip.rotate(forward)
+        basic.pause(pauseDuration)
     }
+}
+function rotateOnePixel (colorNumber: number) {
+    strip.setPixelColor(0, LedColors[colorNumber])
+    for (let index = 0; index < numberOfLEDs; index++) {
+        strip.show()
+        strip.rotate(forward)
+        basic.pause(pauseDuration)
+    }
+}
+input.onButtonPressed(Button.A, function () {
+    LEDMode = 0
     runningTimeCeiling = input.runningTime() + timer
+    strip.showRainbow(1, 360)
+    basic.showIcon(IconNames.Heart)
 })
 input.onButtonPressed(Button.AB, function () {
-    LEDdirection = still
-    strip.showRainbow(1, 360)
+    LEDMode = 2
     runningTimeCeiling = input.runningTime() + timer
+    strip.showRainbow(1, 360)
+    basic.showIcon(IconNames.Happy)
 })
 input.onButtonPressed(Button.B, function () {
-    strip.showRainbow(1, 360)
-    LEDdirection = forward
+    LEDMode = 1
     runningTimeCeiling = input.runningTime() + timer
+    basic.showIcon(IconNames.SmallHeart)
 })
+function rotatePixelWipe (colorNumber: number) {
+    strip.setPixelColor(0, LedColors[colorNumber])
+    for (let index = 0; index < numberOfLEDs; index++) {
+        if (LEDMode == 1) {
+            strip.rotate(forward)
+            strip.show()
+            basic.pause(pauseDuration)
+        } else {
+            break;
+        }
+    }
+    for (let index = 0; index < numberOfLEDs; index++) {
+        if (LEDMode == 1) {
+            strip.setPixelColor(0, LedColors[colorNumber])
+            strip.rotate(forward)
+            strip.show()
+            basic.pause(pauseDuration)
+        } else {
+            break;
+        }
+    }
+}
+let LEDMode = 0
 let runningTimeCeiling = 0
 let timer = 0
 let strip: neopixel.Strip = null
-let LedColorIndex = 0
-let LEDdirection = 0
-let still = 0
+let numberOfLEDs = 0
 let forward = 0
+let pauseDuration = 0
 let LedColors: number[] = []
-basic.showIcon(IconNames.Heart)
 LedColors = [
 neopixel.colors(NeoPixelColors.Red),
-neopixel.colors(NeoPixelColors.Orange),
 neopixel.colors(NeoPixelColors.Yellow),
 neopixel.colors(NeoPixelColors.Green),
 neopixel.colors(NeoPixelColors.Blue),
-neopixel.colors(NeoPixelColors.Indigo),
-neopixel.colors(NeoPixelColors.Violet),
 neopixel.colors(NeoPixelColors.Purple),
 neopixel.colors(NeoPixelColors.White)
 ]
-forward = 1
-let backward = -1
-still = 0
-LEDdirection = forward
-LedColorIndex = 0
-strip = neopixel.create(DigitalPin.P0, 30, NeoPixelMode.RGB)
-timer = 1 * 60000
+pauseDuration = 50
+let speed = 1
+forward = speed
+let backward = speed * -1
+let LedColorArrayNumber = 0
+numberOfLEDs = 22
+strip = neopixel.create(DigitalPin.P2, numberOfLEDs, NeoPixelMode.RGB)
+timer = 10 * 60000
 runningTimeCeiling = timer
-strip.setBrightness(40)
+LEDMode = 0
 strip.showRainbow(1, 360)
 basic.forever(function () {
-    strip.rotate(LEDdirection)
-    strip.show()
-    basic.pause(200)
     if (input.runningTime() > runningTimeCeiling) {
         strip.clear()
+    } else {
+        if (LEDMode == 0) {
+            strip.rotate(forward)
+            strip.show()
+            basic.pause(pauseDuration)
+        } else if (LEDMode == 1) {
+            while (LEDMode == 1) {
+                for (let index = 0; index <= LedColors.length - 1; index++) {
+                    rotatePixelWipe(index)
+                }
+            }
+        } else if (LEDMode == 2) {
+            strip.rotate(0)
+        } else {
+        	
+        }
     }
 })
