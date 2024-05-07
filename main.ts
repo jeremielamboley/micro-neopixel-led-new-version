@@ -15,16 +15,17 @@ function rotateOnePixel (colorNumber: number) {
     }
 }
 input.onButtonPressed(Button.A, function () {
+    strip.clear()
     LEDMode = 0
     runningTimeCeiling = input.runningTime() + timer
-    strip.showRainbow(1, 360)
     basic.showIcon(IconNames.Heart)
+    strip.showRainbow(1, 360)
 })
 input.onButtonPressed(Button.AB, function () {
     LEDMode = 2
     runningTimeCeiling = input.runningTime() + timer
-    strip.showRainbow(1, 360)
     basic.showIcon(IconNames.Happy)
+    strip.showRainbow(1, 360)
 })
 input.onButtonPressed(Button.B, function () {
     LEDMode = 1
@@ -32,6 +33,7 @@ input.onButtonPressed(Button.B, function () {
     basic.showIcon(IconNames.SmallHeart)
 })
 function rotatePixelWipe (colorNumber: number) {
+    strip.clear()
     strip.setPixelColor(0, LedColors[colorNumber])
     for (let index = 0; index < numberOfLEDs; index++) {
         if (LEDMode == 1) {
@@ -39,7 +41,7 @@ function rotatePixelWipe (colorNumber: number) {
             strip.show()
             basic.pause(pauseDuration)
         } else {
-            break;
+        	
         }
     }
     for (let index = 0; index < numberOfLEDs; index++) {
@@ -49,7 +51,7 @@ function rotatePixelWipe (colorNumber: number) {
             strip.show()
             basic.pause(pauseDuration)
         } else {
-            break;
+        	
         }
     }
 }
